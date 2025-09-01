@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import bannerImage from '../../assets/img/banner4.png';
 import logoImage from '../../assets/img/20250701_wala_logo_02 1.png';
+import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 
 function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -20,6 +22,21 @@ function Login() {
       [name]: name === 'username' ? value.toUpperCase() : value
     }));
   };
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(userInfo);
+        if (parsedUserInfo.username) {
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        localStorage.removeItem('userInfo');
+      }
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,9 +78,19 @@ function Login() {
       const result = await response.json();
       
       if (result.code === '0') {
-        // Login successful - redirect to lobby
-        alert('Login successful! Redirecting to game lobby...');
-        window.location.href = result.lobby_url;
+        // Login successful - navigate to dashboard
+        alert('Login successful! Redirecting to dashboard...');
+        
+        // Store user info and sess_id in localStorage
+        localStorage.setItem('userInfo', JSON.stringify(result));
+        
+        // Store sess_id separately for session validation (similar to HTML files)
+        if (result.sess_id) {
+          localStorage.setItem('sess_id', result.sess_id);
+        }
+        
+        // Navigate to dashboard
+        navigate('/dashboard');
       } else {
         setError(result.msg || 'Login failed. Please check your credentials.');
       }
