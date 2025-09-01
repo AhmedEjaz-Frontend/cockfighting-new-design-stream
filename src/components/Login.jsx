@@ -117,6 +117,7 @@ function Login() {
                   marginBottom: '0.5rem',
                   fontWeight: '500',
                   color: '#374151',
+                  textAlign: 'left',
                   fontFamily: 'Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
                 }}>
                   Email Address *
@@ -149,6 +150,7 @@ function Login() {
                   marginBottom: '0.5rem',
                   fontWeight: '500',
                   color: '#374151',
+                  textAlign: 'left',
                   fontFamily: 'Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
                 }}>
                   Password *
@@ -228,12 +230,7 @@ function Login() {
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
 
-              <div style={{ textAlign: 'center', color: '#718096', fontSize: '0.9rem' }}>
-                Don't have an account?{' '}
-                <a href="#" className="login-link" style={{ color: '#3182ce', textDecoration: 'none' }}>
-                  Sign up here
-                </a>
-              </div>
+
             </form>
           </div>
         </div>
