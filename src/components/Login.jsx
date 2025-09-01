@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import './Login.css';
 import bannerImage from '../../assets/img/banner4.png';
 import logoImage from '../../assets/img/20250701_wala_logo_02 1.png';
+import CryptoJS from 'crypto-js';
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ function Login() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'username' ? value.toUpperCase() : value
     }));
   };
 
@@ -26,35 +27,55 @@ function Login() {
     setIsLoading(true);
 
     // Basic validation
-    if (!formData.email || !formData.password) {
+    if (!formData.username || !formData.password) {
       setError('Please fill in all fields');
       setIsLoading(false);
       return;
     }
 
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email address');
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Generate unique ID and sign for API authentication
+      const unique = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const signString = formData.username + formData.password + unique + '17frk50cogstyxkj358j268k0aysgrx0';
       
-      // Simulate login logic
-      if (formData.email === 'admin@cockfighting.com' && formData.password === 'admin123') {
-        alert('Login successful! Welcome to Cock Fighting LiveStream.');
-        // Here you would typically redirect to dashboard
+      // Create MD5 hash using crypto-js
+      const sign = CryptoJS.MD5(signString).toString();
+      
+      const requestBody = {
+        operatorId: 'TSTAG',
+        username: formData.username,
+        password: formData.password,
+        language: 'en-us',
+        uniqueid: unique,
+        sign: sign
+      };
+
+      const response = await fetch('https://apisingle.stagecode.online/logingame', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      const result = await response.json();
+      
+      if (result.code === '0') {
+        // Login successful - redirect to lobby
+        alert('Login successful! Redirecting to game lobby...');
+        window.location.href = result.lobby_url;
       } else {
-        setError('Invalid email or password. Try admin@cockfighting.com / admin123');
+        setError(result.msg || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      console.error('Login error:', err);
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
+
 
   return (
     <div className="login-container">
@@ -120,14 +141,14 @@ function Login() {
                   textAlign: 'left',
                   fontFamily: 'Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
                 }}>
-                  Email Address *
+                  Username *
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="username"
+                  value={formData.username}
                   onChange={handleChange}
-                  placeholder="Enter your email"
+                  placeholder="Enter your username"
                   disabled={isLoading}
                   className="login-input"
                   style={{
@@ -139,7 +160,8 @@ function Login() {
                     backgroundColor: 'white',
                     color: '#374151',
                     outline: 'none',
-                    fontFamily: 'Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
+                    fontFamily: 'Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
+                    textTransform: 'uppercase'
                   }}
                 />
               </div>
