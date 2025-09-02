@@ -1,6 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Text, VStack, HStack, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  VStack,
+  HStack,
+  Button,
+  Grid,
+  GridItem,
+  useBreakpointValue,
+  Image,
+  Flex,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import logoImage from "../../assets/img/20250701_wala_logo_02 1.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -91,8 +103,8 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("sess_id");
+    // localStorage.removeItem("userInfo");
+    // localStorage.removeItem("sess_id");
     // navigate("/login");
   };
 
@@ -365,122 +377,318 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <Box bg="black" minH="100vh" p={4}>
+    <Box 
+      bgGradient="linear(to-br, #11083A, #4E1111)" 
+      minH="100vh" 
+      p={4}
+    >
       <VStack spacing={4} align="stretch">
-        {/* Header with user info and logout */}
-        <HStack justify="space-between" w="100%" px={4}>
-          <Text color="white" fontSize="lg">
-            Welcome, {userInfo?.data?.username || userInfo?.username || "User"}
-          </Text>
-          <Button colorScheme="red" size="sm" onClick={handleLogout}>
-            Logout
-          </Button>
-        </HStack>
+        {/* Enhanced Header with logo, user info and logout */}
+        <Box 
+          bg="rgba(255, 255, 255, 0.08)" 
+          backdropFilter="blur(20px)" 
+          borderRadius="xl" 
+          border="1px solid rgba(255, 255, 255, 0.2)" 
+          p={4}
+          boxShadow="0 8px 32px rgba(0, 0, 0, 0.3)"
+        >
+          <Flex justify="space-between" align="center" w="100%">
+            <Flex align="center" gap={4}>
+              <Image 
+                src={logoImage} 
+                alt="Wala Logo" 
+                h="50px" 
+                w="auto" 
+                objectFit="contain"
+                filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
+              />
+              <Text 
+                color="white" 
+                fontSize="lg" 
+                fontFamily="'Venite Adoremus', 'Poppins', 'Inter', sans-serif"
+                fontWeight="600"
+              >
+                Welcome, {userInfo?.data?.username || userInfo?.username || "User"}
+              </Text>
+            </Flex>
+            <Button 
+              colorScheme="red" 
+              size="sm" 
+              onClick={handleLogout}
+              bg="linear-gradient(135deg, #ef4444, #dc2626)"
+              _hover={{
+                bg: "linear-gradient(135deg, #dc2626, #b91c1c)",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.4)"
+              }}
+              transition="all 0.2s ease"
+            >
+              Logout
+            </Button>
+          </Flex>
+        </Box>
 
         {/* Video Streams */}
-        <VStack spacing={2}>
-          <Text color="white" fontSize="lg" textAlign="center">
+        <VStack spacing={4}>
+          <Text
+            color="white"
+            fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+            textAlign="center"
+            fontWeight="bold"
+          >
             Live Video Streams
           </Text>
-          <HStack spacing={4} justify="center">
-            <Box position="relative">
-              <video
-                ref={video1Ref}
-                width="640"
-                height="360"
-                controls
-                preload="auto"
-                playsInline
-                webkit-playsinline="true"
-                autoPlay
-                muted
-                style={{
-                  border: "2px solid white",
-                  backgroundColor: "#1a1a1a",
-                  borderRadius: "8px",
+          <Grid
+            templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+            gap={6}
+            w="100%"
+            maxW="1400px"
+            mx="auto"
+          >
+            <GridItem>
+              <Box
+                position="relative"
+                w="100%"
+                bg="gray.900"
+                borderRadius="xl"
+                overflow="hidden"
+                boxShadow="2xl"
+                border="2px solid"
+                borderColor="whiteAlpha.300"
+                _hover={{
+                  borderColor: "whiteAlpha.500",
+                  transform: "translateY(-2px)",
+                  transition: "all 0.3s ease",
                 }}
-                onLoadStart={() => console.log("Video 1 loading started")}
-                onCanPlay={() => console.log("Video 1 can play")}
-                onError={(e) => console.error("Video 1 error:", e)}
-              />
-              <Text
-                position="absolute"
-                bottom="10px"
-                left="10px"
-                color="white"
-                fontSize="sm"
-                bg="rgba(0,0,0,0.7)"
-                px={2}
-                py={1}
-                borderRadius="4px"
               >
-                Stream 1
-              </Text>
-            </Box>
-            <Box position="relative">
-              <video
-                ref={video2Ref}
-                width="640"
-                height="360"
-                controls
-                preload="auto"
-                playsInline
-                webkit-playsinline="true"
-                autoPlay
-                muted
-                style={{
-                  border: "2px solid white",
-                  backgroundColor: "#1a1a1a",
-                  borderRadius: "8px",
+                <video
+                  ref={video1Ref}
+                  width="100%"
+                  height="auto"
+                  controls
+                  preload="auto"
+                  playsInline
+                  webkit-playsinline="true"
+                  autoPlay
+                  muted
+                  style={{
+                    display: "block",
+                    backgroundColor: "#1a1a1a",
+                    aspectRatio: "16/9",
+                  }}
+                  onLoadStart={() => console.log("Video 1 loading started")}
+                  onCanPlay={() => console.log("Video 1 can play")}
+                  onError={(e) => console.error("Video 1 error:", e)}
+                />
+                <Box
+                  position="absolute"
+                  bottom={3}
+                  left={3}
+                  bg="blackAlpha.800"
+                  color="white"
+                  px={3}
+                  py={1}
+                  borderRadius="md"
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  backdropFilter="blur(10px)"
+                >
+                  Stream 1
+                </Box>
+              </Box>
+            </GridItem>
+            <GridItem>
+              <Box
+                position="relative"
+                w="100%"
+                bg="gray.900"
+                borderRadius="xl"
+                overflow="hidden"
+                boxShadow="2xl"
+                border="2px solid"
+                borderColor="whiteAlpha.300"
+                _hover={{
+                  borderColor: "whiteAlpha.500",
+                  transform: "translateY(-2px)",
+                  transition: "all 0.3s ease",
                 }}
-                onLoadStart={() => console.log("Video 2 loading started")}
-                onCanPlay={() => console.log("Video 2 can play")}
-                onError={(e) => console.error("Video 2 error:", e)}
-              />
-              <Text
-                position="absolute"
-                bottom="10px"
-                left="10px"
-                color="white"
-                fontSize="sm"
-                bg="rgba(0,0,0,0.7)"
-                px={2}
-                py={1}
-                borderRadius="4px"
               >
-                Stream 2
-              </Text>
-            </Box>
-          </HStack>
+                <video
+                  ref={video2Ref}
+                  width="100%"
+                  height="auto"
+                  controls
+                  preload="auto"
+                  playsInline
+                  webkit-playsinline="true"
+                  autoPlay
+                  muted
+                  style={{
+                    display: "block",
+                    backgroundColor: "#1a1a1a",
+                    aspectRatio: "16/9",
+                  }}
+                  onLoadStart={() => console.log("Video 2 loading started")}
+                  onCanPlay={() => console.log("Video 2 can play")}
+                  onError={(e) => console.error("Video 2 error:", e)}
+                />
+                <Box
+                  position="absolute"
+                  bottom={3}
+                  left={3}
+                  bg="blackAlpha.800"
+                  color="white"
+                  px={3}
+                  py={1}
+                  borderRadius="md"
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  backdropFilter="blur(10px)"
+                >
+                  Stream 2
+                </Box>
+              </Box>
+            </GridItem>
+          </Grid>
         </VStack>
 
         {/* Game Information */}
-        <VStack spacing={2}>
-          <HStack spacing={8} justify="center">
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              Round: {gameInfo.roundId}
-            </Text>
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              Status: {gameInfo.roundStatus}
-            </Text>
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              Result: {gameInfo.drawResult}
-            </Text>
-          </HStack>
+        <Box
+          bg="whiteAlpha.100"
+          borderRadius="xl"
+          p={{ base: 4, md: 6 }}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor="whiteAlpha.200"
+          maxW="1200px"
+          mx="auto"
+          w="100%"
+        >
+          <VStack spacing={4}>
+            <Grid
+              templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+              gap={4}
+              w="100%"
+            >
+              <GridItem>
+                <VStack spacing={1}>
+                  <Text
+                    color="gray.300"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="medium"
+                  >
+                    Round
+                  </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+                    fontWeight="bold"
+                    textAlign="center"
+                  >
+                    {gameInfo.roundId || "--"}
+                  </Text>
+                </VStack>
+              </GridItem>
+              <GridItem>
+                <VStack spacing={1}>
+                  <Text
+                    color="gray.300"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="medium"
+                  >
+                    Status
+                  </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+                    fontWeight="bold"
+                    textAlign="center"
+                  >
+                    {gameInfo.roundStatus || "--"}
+                  </Text>
+                </VStack>
+              </GridItem>
+              <GridItem>
+                <VStack spacing={1}>
+                  <Text
+                    color="gray.300"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="medium"
+                  >
+                    Result
+                  </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+                    fontWeight="bold"
+                    textAlign="center"
+                  >
+                    {gameInfo.drawResult || "--"}
+                  </Text>
+                </VStack>
+              </GridItem>
+            </Grid>
 
-          <HStack spacing={8} justify="center">
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              Time: {gameInfo.time}
-            </Text>
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              Countdown: {gameInfo.countdown}
-            </Text>
-          </HStack>
+            <Grid
+              templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+              gap={4}
+              w="100%"
+              mt={4}
+            >
+              <GridItem>
+                <VStack spacing={1}>
+                  <Text
+                    color="gray.300"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="medium"
+                  >
+                    Time
+                  </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                    fontWeight="bold"
+                    textAlign="center"
+                  >
+                    {gameInfo.time || "--"}
+                  </Text>
+                </VStack>
+              </GridItem>
+              <GridItem>
+                <VStack spacing={1}>
+                  <Text
+                    color="gray.300"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="medium"
+                  >
+                    Countdown
+                  </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                    fontWeight="bold"
+                    textAlign="center"
+                  >
+                    {gameInfo.countdown || "--"}
+                  </Text>
+                </VStack>
+              </GridItem>
+            </Grid>
 
-          <Text color="white" fontSize="lg" textAlign="center">
-            Connection Status: {connectionStatus}
-          </Text>
-        </VStack>
+            <Box mt={4} p={3} bg="blackAlpha.300" borderRadius="lg" w="100%">
+              <Text
+                color={
+                  connectionStatus === "Connected" ? "green.300" : "yellow.300"
+                }
+                fontSize={{ base: "md", md: "lg" }}
+                textAlign="center"
+                fontWeight="semibold"
+              >
+                Connection Status: {connectionStatus}
+              </Text>
+            </Box>
+          </VStack>
+        </Box>
       </VStack>
     </Box>
   );

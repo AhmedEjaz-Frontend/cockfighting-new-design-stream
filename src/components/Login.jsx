@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { toaster } from "./ui/toaster";
 
+
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -82,47 +83,28 @@ function Login() {
         body: JSON.stringify(requestBody),
       });
 
-      const result = await response.json();
-
-      if (result.code === "0") {
-        // Login successful - show success toast
+      // Check if response status is 200
+      if (response.status === 200) {
+        // Login successful - show success notification and redirect to dashboard
         toaster.create({
           title: "Login Successful",
-          description: "Welcome! Redirecting to dashboard...",
+          description: `Welcome ${formData.username}! Redirecting to dashboard...`,
           status: "success",
           duration: 3000,
         });
-
-        // Store user info and sess_id in localStorage
-        localStorage.setItem("userInfo", JSON.stringify(result));
-
-        // Store sess_id separately for session validation (similar to HTML files)
-        if (result.sess_id) {
-          localStorage.setItem("sess_id", result.sess_id);
-        }
-
-        // Navigate to dashboard
+        localStorage.setItem("username", formData.username);
         navigate("/dashboard");
       } else {
-        // Login failed - show error toast
+        // Login failed - show error notification
         toaster.create({
           title: "Login Failed",
-          description:
-            result.msg || "Please check your credentials and try again.",
+          description: "Please check your credentials and try again.",
           status: "error",
           duration: 5000,
         });
-        setError(result.msg || "Login failed. Please check your credentials.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      toaster.create({
-        title: "Network Error",
-        description: "Please check your connection and try again.",
-        status: "error",
-        duration: 5000,
-      });
-      setError("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);
     }
@@ -188,7 +170,7 @@ function Login() {
                 {error}
               </div>
             )}
-
+            {/* <Card className="relative w-[350px] overflow-hidden"> */}
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: "1rem" }}>
                 <label
@@ -197,10 +179,9 @@ function Login() {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "500",
-                    color: "#374151",
                     textAlign: "left",
                     fontFamily:
-                      "Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                   }}
                 >
                   Username *
@@ -216,14 +197,11 @@ function Login() {
                   style={{
                     width: "100%",
                     padding: "0.75rem",
-                    border: "2px solid #e2e8f0",
                     borderRadius: "0.5rem",
                     fontSize: "1rem",
-                    backgroundColor: "white",
-                    color: "#374151",
                     outline: "none",
                     fontFamily:
-                      "Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                     textTransform: "uppercase",
                   }}
                 />
@@ -236,10 +214,9 @@ function Login() {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "500",
-                    color: "#374151",
                     textAlign: "left",
                     fontFamily:
-                      "Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                   }}
                 >
                   Password *
@@ -255,14 +232,11 @@ function Login() {
                   style={{
                     width: "100%",
                     padding: "0.75rem",
-                    border: "2px solid #e2e8f0",
                     borderRadius: "0.5rem",
                     fontSize: "1rem",
-                    backgroundColor: "white",
-                    color: "#374151",
                     outline: "none",
                     fontFamily:
-                      "Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                   }}
                 />
               </div>
@@ -281,7 +255,10 @@ function Login() {
                     alignItems: "center",
                     cursor: "pointer",
                     fontSize: "0.9rem",
-                    color: "#4a5568",
+                    color: "rgba(255, 255, 255, 0.8)",
+                    fontFamily:
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
                   }}
                 >
                   <input
@@ -297,9 +274,10 @@ function Login() {
                   href="#"
                   className="login-link"
                   style={{
-                    color: "#3182ce",
                     textDecoration: "none",
                     fontSize: "0.9rem",
+                    fontFamily:
+                      "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                   }}
                 >
                   Forgot password?
@@ -314,7 +292,6 @@ function Login() {
                 style={{
                   width: "100%",
                   padding: "0.875rem",
-                  backgroundColor: isLoading ? "#a0aec0" : "#3182ce",
                   color: "white",
                   border: "none",
                   borderRadius: "0.5rem",
@@ -323,12 +300,14 @@ function Login() {
                   cursor: isLoading ? "not-allowed" : "pointer",
                   marginBottom: "1rem",
                   fontFamily:
-                    "Poppins, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                    "'Venite Adoremus', 'Poppins', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
                 }}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
               </button>
             </form>
+            {/* </Card> */}
+
           </div>
         </div>
       </div>
