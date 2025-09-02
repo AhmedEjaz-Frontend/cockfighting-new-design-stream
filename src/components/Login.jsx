@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { toaster } from "./ui/toaster";
 
-
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -119,6 +118,9 @@ function Login() {
             src={bannerImage}
             alt="Cock Fighting Banner"
             className="login-banner-image"
+            style={{
+              margin: "0 auto",
+            }}
           />
           <div className="image-overlay">
             <div className="overlay-content">
@@ -160,7 +162,8 @@ function Login() {
                 onClick={() => {
                   toaster.create({
                     title: "Test Notification",
-                    description: "Ant Design notifications are working perfectly!",
+                    description:
+                      "Ant Design notifications are working perfectly!",
                     status: "success",
                     duration: 4000,
                   });
@@ -174,7 +177,8 @@ function Login() {
                   borderRadius: "8px",
                   cursor: "pointer",
                   fontSize: "12px",
-                  fontFamily: "'Venite Adoremus', 'Poppins', 'Inter', sans-serif"
+                  fontFamily:
+                    "'Venite Adoremus', 'Poppins', 'Inter', sans-serif",
                 }}
               >
                 Test Notification
@@ -332,7 +336,6 @@ function Login() {
               </button>
             </form>
             {/* </Card> */}
-
           </div>
         </div>
       </div>
