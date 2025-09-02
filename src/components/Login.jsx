@@ -154,6 +154,31 @@ function Login() {
                   filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
                 }}
               />
+              {/* Test Notification Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  toaster.create({
+                    title: "Test Notification",
+                    description: "Ant Design notifications are working perfectly!",
+                    status: "success",
+                    duration: 4000,
+                  });
+                }}
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 16px",
+                  backgroundColor: "rgba(34, 197, 94, 0.8)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontFamily: "'Venite Adoremus', 'Poppins', 'Inter', sans-serif"
+                }}
+              >
+                Test Notification
+              </button>
             </div>
 
             {error && (
