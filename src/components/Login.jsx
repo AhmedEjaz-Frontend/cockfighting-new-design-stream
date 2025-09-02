@@ -143,7 +143,12 @@ function Login() {
 
         {/* Right Section - Login Form */}
         <div className="login-form-section">
-          <div className="login-card">
+          <div
+            className="login-card"
+            style={{
+              maxWidth: "500px",
+            }}
+          >
             {/* Logo */}
             <div style={{ textAlign: "center", marginBottom: "2rem" }}>
               <img
