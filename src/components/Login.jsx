@@ -154,6 +154,7 @@ function Login() {
                   width: "auto",
                   objectFit: "contain",
                   filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
+                  margin: "0 auto",
                 }}
               />
               {/* Test Notification Button */}
