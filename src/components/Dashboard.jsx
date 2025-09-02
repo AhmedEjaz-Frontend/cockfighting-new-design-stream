@@ -103,9 +103,8 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    // localStorage.removeItem("userInfo");
-    // localStorage.removeItem("sess_id");
-    // navigate("/login");
+    localStorage.clear();
+    navigate("/login");
   };
 
   const showTime = () => {
@@ -377,49 +376,46 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <Box 
-      bgGradient="linear(to-br, #11083A, #4E1111)" 
-      minH="100vh" 
-      p={4}
-    >
+    <Box bgGradient="linear(to-br, #11083A, #4E1111)" minH="100vh" p={4}>
       <VStack spacing={4} align="stretch">
         {/* Enhanced Header with logo, user info and logout */}
-        <Box 
-          bg="rgba(255, 255, 255, 0.08)" 
-          backdropFilter="blur(20px)" 
-          borderRadius="xl" 
-          border="1px solid rgba(255, 255, 255, 0.2)" 
+        <Box
+          bg="rgba(255, 255, 255, 0.08)"
+          backdropFilter="blur(20px)"
+          borderRadius="xl"
+          border="1px solid rgba(255, 255, 255, 0.2)"
           p={4}
           boxShadow="0 8px 32px rgba(0, 0, 0, 0.3)"
         >
           <Flex justify="space-between" align="center" w="100%">
             <Flex align="center" gap={4}>
-              <Image 
-                src={logoImage} 
-                alt="Wala Logo" 
-                h="50px" 
-                w="auto" 
+              <Image
+                src={logoImage}
+                alt="Wala Logo"
+                h="50px"
+                w="auto"
                 objectFit="contain"
                 filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
               />
-              <Text 
-                color="white" 
-                fontSize="lg" 
+              <Text
+                color="white"
+                fontSize="lg"
                 fontFamily="'Venite Adoremus', 'Poppins', 'Inter', sans-serif"
                 fontWeight="600"
+                mb="0px"
               >
-                Welcome, {userInfo?.data?.username || userInfo?.username || "User"}
+                Welcome, {localStorage.getItem("username") || "User"}
               </Text>
             </Flex>
-            <Button 
-              colorScheme="red" 
-              size="sm" 
+            <Button
+              colorScheme="red"
+              size="sm"
               onClick={handleLogout}
               bg="linear-gradient(135deg, #ef4444, #dc2626)"
               _hover={{
                 bg: "linear-gradient(135deg, #dc2626, #b91c1c)",
                 transform: "translateY(-1px)",
-                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.4)"
+                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.4)",
               }}
               transition="all 0.2s ease"
             >
