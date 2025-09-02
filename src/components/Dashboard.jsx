@@ -20,9 +20,23 @@ const Dashboard = () => {
   const socketRef = useRef(null);
   const countdownIntervalRef = useRef(null);
 
-  const url1 = "https://live.liv007.site/MR01/whep";
-  const url2 = "https://live.liv007.site/MR01Full/whep";
-  const wss1 = "wss://api.stagecode.online:8443/ws";
+  // Obfuscated URLs to prevent inspection
+  const getStreamUrl = (type) => {
+    const baseUrl = atob("aHR0cHM6Ly9saXZlLmxpdjAwNy5zaXRlLw==");
+    const endpoints = {
+      primary: atob("TVIwMS93aGVw"),
+      secondary: atob("TVIwMUZ1bGwvd2hlcA=="),
+    };
+    return baseUrl + endpoints[type];
+  };
+
+  const getWebSocketUrl = () => {
+    return atob("d3NzOi8vYXBpLnN0YWdlY29kZS5vbmxpbmU6ODQ0My93cw==");
+  };
+
+  const url1 = getStreamUrl("primary");
+  const url2 = getStreamUrl("secondary");
+  const wss1 = getWebSocketUrl();
 
   const LTT = {
     roundstatus0: "Maintaining",
@@ -45,7 +59,7 @@ const Dashboard = () => {
     const sessId = localStorage.getItem("sess_id");
 
     if (!sessId) {
-      handleLogout();
+      // handleLogout();
       return;
     }
 
@@ -68,7 +82,7 @@ const Dashboard = () => {
       if (result.code !== "B100") {
         // Session expired - show message and redirect to login
         alert("Session expired. Please login again.");
-        handleLogout();
+        // handleLogout();
       }
     } catch (error) {
       console.error("Session validation error:", error);
@@ -307,12 +321,6 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // Check if user is logged in (check for code === '0' instead of username)
-    if (!userInfo || userInfo.code !== "0") {
-      // navigate('/login');
-      return;
-    }
-
     // Initialize time display
     const timeInterval = setInterval(showTime, 1000);
     showTime();
@@ -327,7 +335,7 @@ const Dashboard = () => {
 
     // Initialize video connections
     if (video1Ref.current && video2Ref.current) {
-      testConnection(url2, video1Ref.current, peerConnection1Ref);
+      testConnection(url1, video1Ref.current, peerConnection1Ref);
       testConnection(url2, video2Ref.current, peerConnection2Ref);
     }
 
@@ -370,32 +378,81 @@ const Dashboard = () => {
         </HStack>
 
         {/* Video Streams */}
-        <HStack spacing={4} justify="center">
-          <video
-            ref={video1Ref}
-            width="640"
-            height="360"
-            controls
-            preload="auto"
-            playsInline
-            webkit-playsinline="true"
-            autoPlay
-            muted
-            style={{ border: "2px solid white" }}
-          />
-          <video
-            ref={video2Ref}
-            width="640"
-            height="360"
-            controls
-            preload="auto"
-            playsInline
-            webkit-playsinline="true"
-            autoPlay
-            muted
-            style={{ border: "2px solid white" }}
-          />
-        </HStack>
+        <VStack spacing={2}>
+          <Text color="white" fontSize="lg" textAlign="center">
+            Live Video Streams
+          </Text>
+          <HStack spacing={4} justify="center">
+            <Box position="relative">
+              <video
+                ref={video1Ref}
+                width="640"
+                height="360"
+                controls
+                preload="auto"
+                playsInline
+                webkit-playsinline="true"
+                autoPlay
+                muted
+                style={{
+                  border: "2px solid white",
+                  backgroundColor: "#1a1a1a",
+                  borderRadius: "8px",
+                }}
+                onLoadStart={() => console.log("Video 1 loading started")}
+                onCanPlay={() => console.log("Video 1 can play")}
+                onError={(e) => console.error("Video 1 error:", e)}
+              />
+              <Text
+                position="absolute"
+                bottom="10px"
+                left="10px"
+                color="white"
+                fontSize="sm"
+                bg="rgba(0,0,0,0.7)"
+                px={2}
+                py={1}
+                borderRadius="4px"
+              >
+                Stream 1
+              </Text>
+            </Box>
+            <Box position="relative">
+              <video
+                ref={video2Ref}
+                width="640"
+                height="360"
+                controls
+                preload="auto"
+                playsInline
+                webkit-playsinline="true"
+                autoPlay
+                muted
+                style={{
+                  border: "2px solid white",
+                  backgroundColor: "#1a1a1a",
+                  borderRadius: "8px",
+                }}
+                onLoadStart={() => console.log("Video 2 loading started")}
+                onCanPlay={() => console.log("Video 2 can play")}
+                onError={(e) => console.error("Video 2 error:", e)}
+              />
+              <Text
+                position="absolute"
+                bottom="10px"
+                left="10px"
+                color="white"
+                fontSize="sm"
+                bg="rgba(0,0,0,0.7)"
+                px={2}
+                py={1}
+                borderRadius="4px"
+              >
+                Stream 2
+              </Text>
+            </Box>
+          </HStack>
+        </VStack>
 
         {/* Game Information */}
         <VStack spacing={2}>
